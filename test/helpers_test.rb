@@ -1904,6 +1904,22 @@ class HelpersTest < Minitest::Test
   module ::HelperOne; def one; '1'; end; end
   module ::HelperTwo; def two; '2'; end; end
 
+  module HelperWithIncluded
+    def self.included(base)
+      base.extend(ClassMethods)
+    end
+
+    module ClassMethods
+      def server(address)
+        # do something. (configure a server?)
+      end
+    end
+  end
+
+  class ServerApp < Sinatra::Base
+      # server "10.0.0.1"    
+  end
+
   describe 'Adding new helpers' do
     it 'takes a list of modules to mix into the app' do
       mock_app do
@@ -1969,5 +1985,10 @@ class HelpersTest < Minitest::Test
       get '/two'
       assert_equal '2', body
     end
+
+    it 'calls included method of helpers' do
+      assert ServerApp.respond_to?(:server)
+    end
+
   end
 end
