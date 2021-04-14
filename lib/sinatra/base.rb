@@ -916,7 +916,7 @@ module Sinatra
     attr_accessor :app, :env, :request, :response, :params
     attr_reader   :template_cache
 
-    def initialize(app = nil)
+    def initialize(app = nil, **kwargs)
       super()
       @app = app
       @template_cache = Tilt::Cache.new
@@ -1090,6 +1090,7 @@ module Sinatra
       return unless valid_path?(path)
 
       path = File.expand_path(path)
+      return unless path.start_with?(File.expand_path(public_dir) + '/')
       return unless File.file?(path)
 
       env['sinatra.static_file'] = path
@@ -1441,7 +1442,7 @@ module Sinatra
       # in `extensions` available to the handlers and templates
       def helpers(*extensions, &block)
         class_eval(&block)   if block_given?
-        prepend(*extensions) if extensions.any?
+        include(*extensions) if extensions.any?
       end
 
       # Register an extension. Alternatively take a block from which an
@@ -1522,8 +1523,8 @@ module Sinatra
       # Create a new instance of the class fronted by its middleware
       # pipeline. The object is guaranteed to respond to #call but may not be
       # an instance of the class new was called on.
-      def new(*args, &bk)
-        instance = new!(*args, &bk)
+      def new(*args, **kwargs, &bk)
+        instance = new!(*args, **kwargs, &bk)
         Wrapper.new(build(instance).to_app, instance)
       end
 

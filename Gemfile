@@ -23,7 +23,7 @@ gem "twitter-text", "1.14.7"
 
 if RUBY_ENGINE == 'jruby'
   gem 'nokogiri', '!= 1.5.0'
-  gem 'trinidad'
+  gem 'puma'
 end
 
 if RUBY_ENGINE == 'jruby' || RUBY_ENGINE == 'ruby'
@@ -34,7 +34,7 @@ if RUBY_ENGINE == "ruby"
   gem 'less', '~> 2.0'
   gem 'therubyracer'
   gem 'redcarpet'
-  gem 'wlang', '>= 2.0.1'
+  gem 'wlang', '>= 3.0.1'
   gem 'bluecloth'
   gem 'rdiscount'
   gem 'RedCloth'
